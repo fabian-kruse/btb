@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="eng">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Comaptible" content="ie=edge">
+        <title>Better than Bayes?</title> <!-- sets titel in  browser-->
+        <link rel="stylesheet" href="./styles.css">
+        <link rel="icon" href="/Bayes.jpeg">
+        <script src="script.js"></script>
+        <script src="Bayes.js"></script>
+        <script src="https://kit.fontawesome.com/dcda9ca2c4.js" crossorigin="icons"></script>
+    </head>
+    <head>
+        <title>Basic Web Page</title>
+    </head>
+    <body onload="setup()">
+        <div class="computer_container">
+            <div class="img_container">
+                <img src="Bayes.jpeg" alt="Thomas Bayes" id ="bayes_img" >
+            </div>
+            
+            <div class="bayes_turn">
+                <span class="c_turn"> Better than Bayes?</span>
+            </div>
+
+        </div>
+        <div class="center_bar">
+            <div class="score_container">
+                <div id="game_score">
+                    <span>Score</span> <br>
+                    <span id="player">Player </span><span id="player_score">0</span> <span>: </span> <span id="computer_score">0</span> <span id="bayes">Bayes </span>
+                    
+                </div>
+                <div id="round_score">
+                    <span>Round</span>  <span id="round_number">1</span>
+                </div>
+            </div>
+            <div class="sample_container">
+                <span class="current_sample"></span>
+                <div class="result_container">
+                    <label id="result"></label>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="player_bar">
+            <div class="left_buttons">
+                <div class="button_container">
+                    <button class="start_button button_style">Start</button>
+                </div>
+                <div class="button_container">
+                    <button disabled class="pass_button button_style">Pass</button>
+                </div>
+            </div>
+            <div class="right_buttons">
+                <div class="input_container">
+                    <input disabled id="input" type="text" size="2" placeholder="z">
+                </div>
+                <div class="button_container">
+                    <button disabled class="guess_button button_style">Guess</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="canvas_container">
+            <canvas class="canvas">
+            </canvas>
+        </div>
+        
+        
+
+    </body>
+</html>
