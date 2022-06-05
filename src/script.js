@@ -13,7 +13,7 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
 //guess reactions of computer
 const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
 
-
+//TODO: include game description and manual before first game
 //TODO: guess of computer should be a concept not a list
 //TODO: include visuals for turns
 //TODO: begin new game option after game is over
@@ -21,7 +21,7 @@ const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", 
 //this class represents the current game
 class Game {
     constructor() {
-        //0: player, 1:computer
+        //0: player, 1: computer
         this.score = [0,0] //score of each player
         this.game_over = false
         this.current_round;
@@ -39,7 +39,7 @@ class Game {
         document.getElementsByClassName("start_button")[0].textContent = "Skip"
         
         while (!this.game_over) {
-            buttonsClickable(true);
+            buttonsClickable(true, true);
             this.startRound();
             while(!this.current_round.isOver) {
                 document.getElementById("result").innerHTML = ''
@@ -116,7 +116,7 @@ class Game {
                 this.player_is_major = !this.player_is_major;
             }
             // wait until next round starts
-            buttonsClickable(false)
+            buttonsClickable(false, true)
             await this.waitForNextRound();
         }
         //declare winner
@@ -151,24 +151,29 @@ class Game {
     async playersTurnHandler() {
         this.playersTurn = "";
         // make buttons clickable
+        buttonsClickable(true, false);
         console.log("it is your turn")
+        //wait until player takes action
         while(this.playersTurn  == "") {
             await new Promise((res) => setTimeout(() => res("p2"), 1000));
-            
         }
+        //make buttons unclickable
+        buttonsClickable(false, false);
         return this.playersTurn;
     }
 
     playTurn(player, turn) {
         console.log("player", player,turn)
+        //player takes a guess
         if(turn.toString().includes("guess:")) {
             if (player == "C") {
+                setTimeout(2000)
                 document.getElementsByClassName("c_text")[0].textContent = turn
-                setTimeout(3000)
+                setTimeout(1000)
             }
             let arr = turn.substring(turn.indexOf(":")+1,turn.length ).split(",")
-            console.log("arr before",arr)
-            if (this.current_round.isCorrectConcept(arr)) { // is correct guess
+            //if guess is correct, update score
+            if (this.current_round.isCorrectConcept(arr)) {
                 animateResult(true);
                 if (player == "P") {
                     console.log("player guessed correctly")
@@ -193,6 +198,7 @@ class Game {
             }
             console.log(player+ " passed")
         }
+        //only used for debugging
         if(player == "C")
         console.log("bestGuess:",this.current_round.names[this.model.bestGuess()], "certainty", this.model.posterior[this.model.bestGuess()])
     }
@@ -326,7 +332,7 @@ function setup() {
    const start_button = document.getElementsByClassName("start_button")[0];
    start_button.addEventListener("click", function() {  if(game == null) {
         game = new Game();
-        game.startGame(1);
+        game.startGame(10);
         } else {
            next_turn_handler(); 
         } 
@@ -348,19 +354,21 @@ function setup() {
 
     const input = document.getElementById("input");
     input.addEventListener("input", function() {input_handler(ctx, game.current_round.sample)})
-    
 }
 
-function buttonsClickable(enableGameButtons) {
+function buttonsClickable(enableGameButtons, beforeGame) {
     const start_button = document.getElementsByClassName("start_button")[0];
     const pass_button = document.getElementsByClassName("pass_button")[0];
     const guess_button = document.getElementsByClassName("guess_button")[0];
     const input = document.getElementById("input");
-    
-    start_button.disabled = enableGameButtons
+    //beforeGame = true -> buttons are not clickable before game starts
+    //beforeGame = false -> buttons are clikable only in players turn
     pass_button.disabled = !enableGameButtons;
     guess_button.disabled = !enableGameButtons
     input.disabled = !enableGameButtons
+    if (beforeGame) {
+        start_button.disabled = enableGameButtons
+    }  
 }
 
 function next_turn_handler() {
@@ -380,9 +388,7 @@ function resize_handler() {
     } catch {
         updateCanvas(ctx,current_guess,[])
     }
-    
 }
-
 
 //input of form: 2 + 3z
 // 7+12*z
@@ -652,7 +658,6 @@ function animateResult(guessedCorrectly) {
         document.getElementById("result").innerHTML = '<i class="fa-solid fa-circle-check"></i>'
         return true
     } else {
-        
         document.getElementById("result").innerHTML = '<i class="fa-solid fa-circle-xmark"></i>'
         setTimeout(3000)
         return false
