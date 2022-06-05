@@ -13,7 +13,9 @@ class Bayes {
             this.likelihood.push(1);
         }
     }
-
+    
+    //input: current turn as int, sample as list
+    //returns: action of the computer 
     getAction(turn, sample) {
         this.updateProbabilities(sample)
         setTimeout(getRandomInt(1000,10000));
@@ -29,6 +31,7 @@ class Bayes {
         }
     }
 
+    //helper class for updates
     updateProbabilities(sample) {
         this.updateLikelihood(sample);
         this.updatePosterior(sample);
@@ -40,7 +43,7 @@ class Bayes {
             this.prior.push(1/this.collection_size);
         }
     }
-
+    //updates the likelihood according to sample
     updateLikelihood(sample) {     
         for (let i = 0;i < this.collection_size; i++) {
             this.likelihood[i] = this.likelihoodFunction(sample,this.collection[i]);
@@ -65,11 +68,11 @@ class Bayes {
         }
     }
 
+    //returns current best guess
     bestGuess() {
         const max = Math.max(...this.posterior);
         return this.posterior.indexOf(max);
     }
-    
 
     //returns 1 if subset is a subset of set, else returns 0
     setIndicatorFunction(subset, set) {

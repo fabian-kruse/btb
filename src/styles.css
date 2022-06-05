@@ -232,7 +232,7 @@ span {
         position: relative;
     }
 
-    .c_turn {
+    .c_text {
         font-size: 20px;
     }
 
@@ -291,7 +291,7 @@ span {
         font-size: larger;
     }
 
-    .c_turn{
+    .c_text{
         font-size: x-large;
     }
 

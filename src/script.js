@@ -6,16 +6,23 @@ var ctx;
 var game;
 var round;
 var nextTurn = false;
+//pass reactions of computer
 const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell yet", "Pass","I don't have it",
  "Give me some time","Time will tell", "Can you give me a hint?", "I have no idea", "Not sure yet...", "I almost have it", "What is the posterior?",
 "Almost...", "I will win...Soon!", "I have to pass here", "I pass...for now"]
-
+//guess reactions of computer
 const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
 
+
+//TODO: guess of computer should be a concept not a list
+//TODO: include visuals for turns
+//TODO: begin new game option after game is over
+
+//this class represents the current game
 class Game {
     constructor() {
         //0: player, 1:computer
-        this.score = [0,0]
+        this.score = [0,0] //score of each player
         this.game_over = false
         this.current_round;
         this.player_is_major = true;
@@ -95,12 +102,18 @@ class Game {
                 
             }
             updateScores(this.score[0], this.score[1]);
-            if( Math.max(this.score[0],this.score[1])>= pointLimit) {
-                this.game_over = true; //plays only one round
-            // if point limit reached
-            } else {
+            //if any player reached the point limit, end the game
+            if(Math.max(this.score[0],this.score[1]) >= pointLimit) {
+                this.game_over = true;
+                if (this.score[0] < this.score[1]) {
+                    document.getElementsByClassName("c_text")[0].textContent = "You are not better than Bayes!"
+                    document.getElementById("bayes_img").src = "/img/bayesWin.jpeg";
+
+                } else {
+                    document.getElementsByClassName("c_text")[0].textContent = "You are better than Bayes!"
+                } 
+            } else { //swtich major player
                 this.player_is_major = !this.player_is_major;
-                //update scores
             }
             // wait until next round starts
             buttonsClickable(false)
@@ -123,7 +136,7 @@ class Game {
 
         //visual start of round
         document.getElementById("result").innerHTML = ""
-        document.getElementsByClassName("c_turn")[0].textContent = "We'll see!"
+        document.getElementsByClassName("c_text")[0].textContent = "We'll see!"
 
         showSample(this.current_round.getNextSample());
     }
@@ -150,7 +163,7 @@ class Game {
         console.log("player", player,turn)
         if(turn.toString().includes("guess:")) {
             if (player == "C") {
-                document.getElementsByClassName("c_turn")[0].textContent = turn
+                document.getElementsByClassName("c_text")[0].textContent = turn
                 setTimeout(3000)
             }
             let arr = turn.substring(turn.indexOf(":")+1,turn.length ).split(",")
@@ -163,7 +176,7 @@ class Game {
                     this.score[0] = this.score[0] +1
 
                 } else if(player == "C") {
-                    document.getElementsByClassName("c_turn")[0].textContent = 
+                    document.getElementsByClassName("c_text")[0].textContent = 
                     guessReaction[getRandomInt(0,guessReaction.length)]+game.current_round.getNameOfGuess(arr.filter(el => {return el != ""})) + ".";
                     console.log("computer guessed correctly")
                     this.current_round.isOver = true
@@ -176,7 +189,7 @@ class Game {
             }
         } else { //player passed
             if (player == "C") {
-                document.getElementsByClassName("c_turn")[0].textContent = passReaction[getRandomInt(0,passReaction.length)]
+                document.getElementsByClassName("c_text")[0].textContent = passReaction[getRandomInt(0,passReaction.length)]
             }
             console.log(player+ " passed")
         }
@@ -231,8 +244,7 @@ class Round {
                     temp = buildConcept(x0,0,x2,base,0,0)
                 if (temp.length >= 5) {
                     this.collection.push(temp.slice());
-                    this.names.push(x0+"+"+x2+"*"+base+"**z")
-            
+                    this.names.push(x0 + "+" + x2 + "*" + base + "**z")
                 }
                 }
             }
@@ -314,7 +326,7 @@ function setup() {
    const start_button = document.getElementsByClassName("start_button")[0];
    start_button.addEventListener("click", function() {  if(game == null) {
         game = new Game();
-        game.startGame(10);
+        game.startGame(1);
         } else {
            next_turn_handler(); 
         } 
