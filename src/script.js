@@ -15,7 +15,6 @@ const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", 
 
 //TODO: include game description and manual before first game
 //TODO: guess of computer should be a concept not a list
-//TODO: include visuals for turns
 //TODO: begin new game option after game is over
 
 //this class represents the current game
@@ -98,7 +97,9 @@ class Game {
                     }
                     this.current_round.isOver = true;
                 } 
-                await timeout(3000)
+                console.log("wait")
+                await timeout(1500)
+                console.log("wait done")
                 
             }
             updateScores(this.score[0], this.score[1]);
@@ -384,20 +385,28 @@ function updateScores(p_score, c_score) {
 
 function resize_handler() {
     try{
-        updateCanvas(ctx,current_guess,game.current_round.sample)
+        updateCanvas(ctx, current_guess, game.current_round.sample)
     } catch {
-        updateCanvas(ctx,current_guess,[])
+        updateCanvas(ctx, current_guess,[])
     }
 }
+
+function turnOverlayOn() {
+    document.getElementsByClassName("overlay")[0].style.display = "block";
+  }
+  
+  function turnOverlayOff() {
+    document.getElementsByClassName("overlay")[0].style.display = "none";
+  }
 
 //input of form: 2 + 3z
 // 7+12*z
 function input_handler(ctx, sample) {
     let concept = document.getElementById("input").value.replace(/[^-()\d/*+.z^]/g,"");
     //let concept = input.slice();
-    if (concept.length==0) {
+    if (concept.length == 0) {
         console.log("length of 0")
-        return [0,1]
+        return [0, 1]
     }
     let arr;
     if (concept.includes("+")) {
@@ -432,7 +441,7 @@ function input_handler(ctx, sample) {
         } else {
             if (arr[i].includes("/")) {
                 console.log("contains /");
-                return [0,1]
+                return [0, 1]
             }
             //2z
             //2*z
@@ -474,7 +483,7 @@ function input_handler(ctx, sample) {
             }
         }
     }
-    current_guess = buildConcept(x0,x1,x2,base,x3,exponent);
+    current_guess = buildConcept(x0, x1, x2, base, x3, exponent);
     updateCanvas(ctx,current_guess,sample)
 }
 
@@ -492,7 +501,7 @@ function buildConcept(x0,x1,x2,base,x3,exponent) {
     concept.push(number);
     let duplicate  = 0;
     for (let k = -1; k > -100; k--) {
-        number = x0+x1*k+x3*k**exponent
+        number = x0 + x1 * k + x3 * k ** exponent
         if (number >= 0 && number <= 100 && Number.isInteger(number)) {
             concept.push(number);
             
@@ -512,7 +521,7 @@ function buildConcept(x0,x1,x2,base,x3,exponent) {
     }
     
     for (let k = 1; k <= 100; k++) {
-        number = x0+x1*k+x2*Math.pow(base,k)+x3*Math.pow(k,exponent)
+        number = x0 + x1 * k + x2 * Math.pow(base,k) + x3 * Math.pow(k, exponent)
         if (number >= 0 && number <= 100 && Number.isInteger(number)) {
             concept.push(number);
         } else {
@@ -522,7 +531,7 @@ function buildConcept(x0,x1,x2,base,x3,exponent) {
         if (lastNumber == number) {
             duplicate = duplicate + 1;
             if (duplicate > 3) {
-                return buildConcept(0,1,0,0,0,0);
+                return buildConcept(0, 1, 0, 0, 0, 0);
             }
         } else {
             duplicate = 0;
@@ -531,7 +540,7 @@ function buildConcept(x0,x1,x2,base,x3,exponent) {
     }
     concept = concept.filter(Boolean)
     concept = [...new Set(concept)];
-    return concept.sort(function(a, b){return a - b});
+    return concept.sort(function(a, b) {return a - b});
 
 }
 
@@ -558,10 +567,10 @@ function updateCanvas(ctx, guess, sample) {
     if (!alt_canvas) {
         let grid_size = width / 100; 
         //draw cooridinate system
-        for (let i = 0; i <= 100; i = i+10) {
+        for (let i = 0; i <= 100; i = i + 10) {
             ctx.font = 2*grid_size+"px arial";
             ctx.fillStyle ="black"
-            ctx.fillText(i, grid_size +i*grid_size, 3*height/5 + 20*grid_size/4)   
+            ctx.fillText(i, grid_size +i*grid_size, 3 *height / 5 + 20 * grid_size / 4)   
         }
 
         // draw guess
