@@ -13,7 +13,8 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
 //guess reactions of computer
 const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
 
-//TODO: include game description and manual before first game
+//TODO: add button for instructions during game
+//TODO: adjust game descriptions for mobile
 //TODO: guess of computer should be a concept not a list
 //TODO: begin new game option after game is over
 
@@ -328,10 +329,11 @@ function setup() {
     ctx = setupCanvas(document.getElementsByClassName("canvas")[0]);
     updateCanvas(ctx,Array.from({length:100},  (_,i) => i+1),[]);
 
-
-   //adds functionality of "start/nextTurn" button
-   const start_button = document.getElementsByClassName("start_button")[0];
-   start_button.addEventListener("click", function() {  if(game == null) {
+    //turn on overlay
+    turnOverlayOn();
+    //adds functionality of "start/nextTurn" button
+    const start_button = document.getElementsByClassName("start_button")[0];
+    start_button.addEventListener("click", function() {  if(game == null) {
         game = new Game();
         game.startGame(10);
         } else {

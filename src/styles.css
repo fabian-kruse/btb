@@ -35,8 +35,7 @@
   }
 
   .indented-text {
-      display: block;
-    
+    display: block;
     margin-left: 20px;
   }
 
@@ -72,7 +71,6 @@ span {
     width: 95%;
     margin-top: 2%;
     background-color: var(--main_background); 
-
     border: 2px solid var(--font_color);
     border-radius: 30px;
     box-shadow: var(--font_color) 4px 4px 0 0;
@@ -98,7 +96,6 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 
 #game_score {
@@ -114,8 +111,6 @@ span {
     border-top-right-radius: inherit;
     border-bottom-right-radius: inherit;
 }
-
-
 
 .current_sample {
    font-size: larger;
@@ -144,11 +139,8 @@ span {
     display: flex;
     align-items: center;
     justify-content: center;
-    height:100%;
-   
+    height:100%;  
 }
-
-
 
 .player_bar {
     margin-top: 0.8%;
@@ -156,7 +148,6 @@ span {
     width: 90%;
     display: grid;
     grid-template-columns: 50% 50%;
-    
 }
 
 .button_container {
@@ -204,9 +195,6 @@ span {
     opacity: 0.5;
 }
 
-
-
-/* CSS */
 .button_style {
     height: 80%;
     width: 90%;
@@ -243,22 +231,14 @@ span {
     box-shadow: var(--disableed_color) 4px 4px 0 0;
     border: 2px solid var(--disableed_color);
     opacity: 0.3;
-    
 }
 
 .button_style:disabled, .button_style:hover {
     background-color: var(--main_background);
 }
 
-
-
-
-
-
-
 @media screen and (min-width: 550px){
     
-
     .button_style {
         width: 90%;
         font-size: large;
@@ -289,7 +269,6 @@ span {
     }
 }
 
-
 @media screen and (min-width: 1024px){
 
     .player_bar{
@@ -312,7 +291,6 @@ span {
     .img_container {
         width: 12vh;
     }
-
 }
 
 @media screen and (min-width: 1440px){
@@ -343,6 +321,4 @@ span {
     .center_bar {
         width: 50%;
     }
-
-    
 }
