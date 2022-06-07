@@ -130,14 +130,14 @@ span {
     grid-template-columns: 18% 82%;
 }
 
-.question_mark_container {
+.help_container {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: auto;
 }
 
-.question_mark_button {
+.help_button {
     padding: 0 12px;
     border-radius: 30px;
     background-color: var(--main_background);
@@ -146,9 +146,10 @@ span {
     border: 2px solid var(--font_color);
     text-align: center;
     font-size: 15px;
+    cursor: pointer;
 }
 
-#question_mark {
+#help {
     font-size: 30px;
 }
 
@@ -297,7 +298,7 @@ span {
         width: 10vh;
     }
 
-    #question_mark {
+    #help {
         font-size: 35px;
     }
 }

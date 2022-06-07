@@ -341,6 +341,12 @@ function setup() {
         } 
     });
 
+    //adds functionality to "help" button
+    const help_button = document.getElementsByClassName("help_button")[0];
+    help_button.addEventListener("click", function() {
+        turnOverlayOn();
+    }); 
+
    //functionality of "pass" button
    const pass_button = document.getElementsByClassName("pass_button")[0];
    pass_button.addEventListener("click", function()  { if (round != null && round.started) {       
