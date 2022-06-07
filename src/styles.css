@@ -15,7 +15,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.6);
     z-index: 2;
     cursor: pointer;
   }
@@ -30,8 +30,11 @@
 
   .overlay-content {
     font-size: 20px;
-    color: white;
+    color: var(--main_background);
     white-space: pre-line;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
   }
 
   .indented-text {
@@ -117,10 +120,10 @@ span {
 }
 
 .upper_container{
-    width: 70%;
+    width: 80%;
     height: auto;
     display: grid;
-    grid-template-columns: 15% 85%;
+    grid-template-columns: 20% 80%;
 }
 
 .computer_container {
@@ -145,12 +148,20 @@ span {
     box-shadow: var(--font_color) 4px 4px 0 0;
     border: 2px solid var(--font_color);
     text-align: center;
-    font-size: 15px;
+ 
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
 }
 
+.help_button:active {
+    box-shadow: var(--font_color) 2px 2px 0 0;
+    transform: translate(2px, 2px);
+  }
+
 #help {
-    font-size: 30px;
+    font-size: 25px;
 }
 
 .img_container {
