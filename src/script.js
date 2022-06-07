@@ -330,7 +330,7 @@ function setup() {
     updateCanvas(ctx,Array.from({length:100},  (_,i) => i+1),[]);
 
     //turn on overlay
-    turnOverlayOn();
+    //turnOverlayOn();
     //adds functionality of "start/nextTurn" button
     const start_button = document.getElementsByClassName("start_button")[0];
     start_button.addEventListener("click", function() {  if(game == null) {

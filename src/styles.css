@@ -116,12 +116,40 @@ span {
    font-size: larger;
 }
 
+.upper_container{
+    width: 70%;
+    height: auto;
+    display: grid;
+    grid-template-columns: 15% 85%;
+}
 
 .computer_container {
-    width: 60%;
+    width: 100%;
     height: auto;
     display: grid;
     grid-template-columns: 18% 82%;
+}
+
+.question_mark_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: auto;
+}
+
+.question_mark_button {
+    padding: 0 12px;
+    border-radius: 30px;
+    background-color: var(--main_background);
+    color: var(--font_color);
+    box-shadow: var(--font_color) 4px 4px 0 0;
+    border: 2px solid var(--font_color);
+    text-align: center;
+    font-size: 15px;
+}
+
+#question_mark {
+    font-size: 30px;
 }
 
 .img_container {
@@ -261,11 +289,16 @@ span {
         width: 70%;
     }
 
-    .computer_container {
+    .upper_container {
         width: 60%;
     }
+
     .img_container {
         width: 10vh;
+    }
+
+    #question_mark {
+        font-size: 35px;
     }
 }
 
@@ -284,7 +317,7 @@ span {
         width: 85%;
     }
 
-    .computer_container{
+    .upper_container{
         width: 50%;
     }
 
@@ -314,8 +347,8 @@ span {
         width: 45%;
     }
 
-    .computer_container {
-        width: 30%;
+    .upper_container {
+        width: 40%;
     }
 
     .center_bar {
