@@ -7,8 +7,10 @@
 }
 
 .overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: fixed;
-    display: none;
     width: 100%;
     height: 100%;
     top: 0;
@@ -20,15 +22,15 @@
     cursor: pointer;
   }
   
-  .overlay-content-container{
-    position: absolute;
-    top: 45%;
-    left: 40%;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
+  .overlay-content-container {
+    transform: translate(0, 20%);
+   
+    display: flex;
+    flex-direction: column;
   }
 
   .overlay-content {
+    transform: translate(15%, 0);
     font-size: 20px;
     color: var(--main_background);
     white-space: pre-line;
