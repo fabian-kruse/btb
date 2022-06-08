@@ -10,6 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: auto;
     position: fixed;
     width: 100%;
     height: 100%;
@@ -23,15 +24,49 @@
   }
   
   .overlay-content-container {
-    transform: translate(0, 20%);
-   
-    display: flex;
-    flex-direction: column;
+    transform: translate(0, 1%);
+    display: grid;
+    grid-template-rows: auto;
   }
 
-  .overlay-content {
-    transform: translate(15%, 0);
-    font-size: 20px;
+  .overlay-table {
+    width: 95%;
+    transform: translate(2.5%,0);
+  }
+
+  .score_table {
+    border-collapse: collapse;
+    width: 80%;
+    margin: 0 auto;
+  }
+
+    .score_table td, .score_table th {
+        padding: 8px;
+    }
+
+    .score_table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        border-bottom: 2px solid black;
+        background-color: grey;
+        color: lightgray;
+    }
+
+    .score_table tr {
+        background-color: lightgrey;
+    }
+
+    .score_table tr:hover {
+        background-color: #ddd;
+    }
+
+  .overlay-text-container {
+    margin: 0% 2.5%;
+  }
+
+  .overlay-text {
+    font-size: 16px;
     color: var(--main_background);
     white-space: pre-line;
     user-select: none;
@@ -314,6 +349,14 @@ span {
     #help {
         font-size: 35px;
     }
+      
+    .score_table {
+    width: 60%;
+    }
+
+    .overlay-text {
+    font-size: 20px;
+    }
 }
 
 @media screen and (min-width: 1024px){
@@ -337,6 +380,14 @@ span {
 
     .img_container {
         width: 12vh;
+    }
+
+    .score_table {
+        width: 40%;
+      }
+
+    .overlay-text-container {
+        margin: 0% 4%;
     }
 }
 
@@ -367,5 +418,20 @@ span {
 
     .center_bar {
         width: 50%;
+    }
+    .overlay-content-container {
+        transform: translate(0, 1.5%);
+    }
+
+    .score_table {
+        width: 35%;
+    }
+
+    .overlay-text {
+        font-size: 23px;
+    }
+
+    .overlay-text-container {
+        margin: 0% 5%;
     }
 }
