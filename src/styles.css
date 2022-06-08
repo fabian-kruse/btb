@@ -6,7 +6,7 @@
     --main_background: lightgrey;
 }
 
-.overlay {
+.overlay { 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,6 +35,7 @@
   }
 
   .score_table {
+    border: 1.5px solid black;
     border-collapse: collapse;
     width: 80%;
     margin: 0 auto;
@@ -50,7 +51,7 @@
         text-align: left;
         border-bottom: 2px solid black;
         background-color: grey;
-        color: lightgray;
+        color: lightgray;   
     }
 
     .score_table tr {
@@ -78,6 +79,24 @@
     display: block;
     margin-left: 20px;
   }
+
+.afterGame {
+    background-color: rgba(0,0,0,0.8);
+    visibility: hidden;
+}
+
+.afterGame-overlay-container {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.afterGame-text {
+    padding: 16px;
+    font-size: 30px;
+    color: lightgrey;
+}
 
  
 body {
@@ -386,6 +405,10 @@ span {
 
     .overlay-text-container {
         margin: 0% 4%;
+    }
+
+    .afterGame-text {
+        font-size: 35px;
     }
 }
 

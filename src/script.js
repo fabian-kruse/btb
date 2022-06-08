@@ -15,7 +15,8 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
 const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
 
 //TODO: guess of computer should be a concept not a list
-//TODO: begin new game option after game is over
+//TODO: include round counter
+//TODO: add more complicated concepts
 
 //this class represents the current game
 class Game {
@@ -107,12 +108,16 @@ class Game {
             if(Math.max(this.score[0], this.score[1]) >= pointLimit) {
                 this.game_over = true;
                 if (this.score[0] < this.score[1]) {
+                    totalScore[1] = totalScore[1] + 1;
                     document.getElementsByClassName("c_text")[0].textContent = "You are not better than Bayes!"
                     document.getElementById("bayes_img").src = "/img/bayesWin.jpeg";
-
+                    document.getElementById("winning_text").textContent = "You lose!"
                 } else {
+                    totalScore[0] = totalScore[0] + 1;
                     document.getElementsByClassName("c_text")[0].textContent = "You are better than Bayes!"
-                } 
+                    document.getElementById("winning_text").textContent = "You win!"
+                }
+                break;
             } else { //swtich major player
                 this.player_is_major = !this.player_is_major;
             }
@@ -120,6 +125,7 @@ class Game {
             buttonsClickable(false, true)
             await this.waitForNextRound();
         }
+        turnAfterRoundOverlayOn();
         //declare winner
     }
 
@@ -322,6 +328,18 @@ class Round {
     }
 }
 
+function setupNextGame() {
+    updateCanvas(ctx,Array.from({length: 100},  (_, i) => i + 1), []);
+    game = null;
+    document.getElementsByClassName("start_button")[0].textContent = "Start";
+    buttonsClickable(false, true);
+    updateScores(0, 0);
+    document.getElementById("bayes_img").src = "/img/bayes.jpeg";
+    showSample("");
+    document.getElementById("result").innerHTML = '';
+    document.getElementsByClassName("c_text")[0].textContent = "Better than Bayes?"
+}
+
 //handles setup of website
 function setup() {
     window.addEventListener('resize', function() {resize_handler()});
@@ -334,7 +352,7 @@ function setup() {
     const start_button = document.getElementsByClassName("start_button")[0];
     start_button.addEventListener("click", function() { if(game == null) {
         game = new Game();
-        game.startGame(10);
+        game.startGame(2);
         } else {
            next_turn_handler(); 
         } 
@@ -398,22 +416,42 @@ function resize_handler() {
     }
 }
 
+function turnOverlayOff() {
+    document.getElementsByClassName("overlay")[0].style.display = "none";
+  }
+
 function turnOverlayOn() {
+    updateTableValues();
+    document.getElementsByClassName("overlay")[0].style.display = "block";
+  }
+
+function updateTableValues() {
     if (game == null) {
-        document.getElementsByClassName("player_score")[0].textContent =  0;
-    document.getElementsByClassName("computer_score")[0].textContent =  0; 
+        document.getElementsByClassName("player_score")[0].textContent = 0;
+        document.getElementsByClassName("computer_score")[0].textContent = 0; 
     } else {
         document.getElementsByClassName("player_score")[0].textContent = game.score.slice()[0];
         document.getElementsByClassName("computer_score")[0].textContent = game.score.slice()[1]; 
+        document.getElementsByClassName("player_score")[2].textContent = game.score.slice()[0];
+        document.getElementsByClassName("computer_score")[2].textContent = game.score.slice()[1]; 
     }
     document.getElementsByClassName("player_score")[1].textContent = totalScore.slice()[0];
     document.getElementsByClassName("computer_score")[1].textContent = totalScore.slice()[1];
-    document.getElementsByClassName("overlay")[0].style.display = "block";
-  }
+    document.getElementsByClassName("player_score")[3].textContent = totalScore.slice()[0];
+    document.getElementsByClassName("computer_score")[3].textContent = totalScore.slice()[1];
+}
+
+function turnAfterRoundOverlayOff() {
+    document.getElementsByClassName("afterGame")[0].style.visibility = "hidden";
+    setupNextGame();
+}
+
+function turnAfterRoundOverlayOn() {
+    updateTableValues();
+    document.getElementsByClassName("afterGame")[0].style.visibility='visible';
+}
   
-  function turnOverlayOff() {
-    document.getElementsByClassName("overlay")[0].style.display = "none";
-  }
+
 
 //input of form: 2 + 3z
 // 7+12*z
