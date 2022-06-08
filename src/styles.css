@@ -80,7 +80,7 @@
   }
 
  
-body{
+body {
     display: flex;
     align-items: center;
     align-content: center;
@@ -93,7 +93,7 @@ span {
     font-weight: 600;
 }
 
-.canvas_container{
+.canvas_container {
     margin-top: 2%;
     width: 95%;
 }
@@ -117,7 +117,7 @@ span {
     color: var(--font_color);
 }
 
-#player , #bayes{
+#player , #bayes {
     visibility: hidden;
     position: absolute;
 }
@@ -153,10 +153,10 @@ span {
 }
 
 .current_sample {
-   font-size: larger;
+    font-size: larger;
 }
 
-.upper_container{
+.upper_container {
     width: 80%;
     height: auto;
     display: grid;
@@ -185,7 +185,6 @@ span {
     box-shadow: var(--font_color) 4px 4px 0 0;
     border: 2px solid var(--font_color);
     text-align: center;
- 
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
@@ -238,8 +237,7 @@ span {
     grid-template-columns: auto auto;
 }
 
-.input_container{
-
+.input_container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -294,12 +292,12 @@ span {
 }
 
 .button_style:hover {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 .button_style:active {
-  box-shadow: var(--font_color) 2px 2px 0 0;
-  transform: translate(2px, 2px);
+    box-shadow: var(--font_color) 2px 2px 0 0;
+    transform: translate(2px, 2px);
 }
 
 .button_style:disabled {
@@ -351,17 +349,17 @@ span {
     }
       
     .score_table {
-    width: 60%;
+        width: 60%;
     }
 
     .overlay-text {
-    font-size: 20px;
+        font-size: 20px;
     }
 }
 
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1024px) {
 
-    .player_bar{
+    .player_bar {
         width: 60%;
     }
 
@@ -374,7 +372,7 @@ span {
         width: 85%;
     }
 
-    .upper_container{
+    .upper_container {
         width: 50%;
     }
 
@@ -391,7 +389,8 @@ span {
     }
 }
 
-@media screen and (min-width: 1440px){
+@media screen and (min-width: 1440px) {
+
     .canvas_container {
         width: 60%;
     }
@@ -404,7 +403,7 @@ span {
         font-size: larger;
     }
 
-    .c_text{
+    .c_text {
         font-size: x-large;
     }
 

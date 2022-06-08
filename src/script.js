@@ -6,6 +6,7 @@ var ctx;
 var game;
 var round;
 var nextTurn = false;
+var totalScore = [0, 0];
 //pass reactions of computer
 const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell yet", "Pass","I don't have it",
  "Give me some time","Time will tell", "Can you give me a hint?", "I have no idea", "Not sure yet...", "I almost have it", "What is the posterior?",
@@ -398,6 +399,15 @@ function resize_handler() {
 }
 
 function turnOverlayOn() {
+    if (game == null) {
+        document.getElementsByClassName("player_score")[0].textContent =  0;
+    document.getElementsByClassName("computer_score")[0].textContent =  0; 
+    } else {
+        document.getElementsByClassName("player_score")[0].textContent = game.score.slice()[0];
+        document.getElementsByClassName("computer_score")[0].textContent = game.score.slice()[1]; 
+    }
+    document.getElementsByClassName("player_score")[1].textContent = totalScore.slice()[0];
+    document.getElementsByClassName("computer_score")[1].textContent = totalScore.slice()[1];
     document.getElementsByClassName("overlay")[0].style.display = "block";
   }
   
