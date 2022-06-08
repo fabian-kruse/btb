@@ -13,7 +13,6 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
 //guess reactions of computer
 const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
 
-//TODO: adjust game descriptions for mobile
 //TODO: guess of computer should be a concept not a list
 //TODO: begin new game option after game is over
 
@@ -21,7 +20,7 @@ const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", 
 class Game {
     constructor() {
         //0: player, 1: computer
-        this.score = [0,0] //score of each player
+        this.score = [0, 0] //score of each player
         this.game_over = false
         this.current_round;
         this.player_is_major = true;
@@ -45,7 +44,7 @@ class Game {
                 if (this.player_is_major) {
                     //take input from player (either pass or guess)
                     pTurn = await this.playersTurnHandler(false);
-                    this.playTurn("P",pTurn);
+                    this.playTurn("P", pTurn);
                     if (this.current_round.isOver) {
                         break;
                     }
@@ -64,7 +63,7 @@ class Game {
                     }
                     //take input from player (either pass or guess)
                     pTurn = await this.playersTurnHandler(false);
-                    this.playTurn("P",pTurn);
+                    this.playTurn("P", pTurn);
                     if (this.current_round.isOver) {
                         break;
                     }
@@ -76,7 +75,7 @@ class Game {
                 if (this.current_round.sample.length > 4) {
                     if (this.player_is_major ) {
                         pTurn = await this.playersTurnHandler(true);
-                        this.playTurn("P",pTurn);
+                        this.playTurn("P", pTurn);
                     if (this.current_round.isOver) {
                         break;
                     }
@@ -93,7 +92,7 @@ class Game {
                         }
                         //take input from player (either pass or guess)
                         pTurn = await this.playersTurnHandler(false);
-                        this.playTurn("P",pTurn);
+                        this.playTurn("P", pTurn);
                     }
                     this.current_round.isOver = true;
                 } 
@@ -104,7 +103,7 @@ class Game {
             }
             updateScores(this.score[0], this.score[1]);
             //if any player reached the point limit, end the game
-            if(Math.max(this.score[0],this.score[1]) >= pointLimit) {
+            if(Math.max(this.score[0], this.score[1]) >= pointLimit) {
                 this.game_over = true;
                 if (this.score[0] < this.score[1]) {
                     document.getElementsByClassName("c_text")[0].textContent = "You are not better than Bayes!"
@@ -164,7 +163,7 @@ class Game {
     }
 
     playTurn(player, turn) {
-        console.log("player", player,turn)
+        console.log("player", player, turn)
         //player takes a guess
         if(turn.toString().includes("guess:")) {
             if (player == "C") {
@@ -172,18 +171,18 @@ class Game {
                 document.getElementsByClassName("c_text")[0].textContent = turn
                 setTimeout(1000)
             }
-            let arr = turn.substring(turn.indexOf(":")+1,turn.length ).split(",")
+            let arr = turn.substring(turn.indexOf(":") + 1,turn.length ).split(",")
             //if guess is correct, update score
             if (this.current_round.isCorrectConcept(arr)) {
                 animateResult(true);
                 if (player == "P") {
                     console.log("player guessed correctly")
                     this.current_round.isOver = true
-                    this.score[0] = this.score[0] +1
+                    this.score[0] = this.score[0] + 1 
 
                 } else if(player == "C") {
                     document.getElementsByClassName("c_text")[0].textContent = 
-                    guessReaction[getRandomInt(0,guessReaction.length)]+game.current_round.getNameOfGuess(arr.filter(el => {return el != ""})) + ".";
+                        guessReaction[getRandomInt(0,guessReaction.length)] + game.current_round.getNameOfGuess(arr.filter(el => {return el != ""})) + ".";
                     console.log("computer guessed correctly")
                     this.current_round.isOver = true
                     this.score[1] = this.score[1] + 1
@@ -195,13 +194,13 @@ class Game {
             }
         } else { //player passed
             if (player == "C") {
-                document.getElementsByClassName("c_text")[0].textContent = passReaction[getRandomInt(0,passReaction.length)]
+                document.getElementsByClassName("c_text")[0].textContent = passReaction[getRandomInt(0, passReaction.length)]
             }
             console.log(player+ " passed")
         }
         //only used for debugging
         if(player == "C")
-        console.log("bestGuess:",this.current_round.names[this.model.bestGuess()], "certainty", this.model.posterior[this.model.bestGuess()])
+        console.log("bestGuess:", this.current_round.names[this.model.bestGuess()], "certainty", this.model.posterior[this.model.bestGuess()])
     }
 }
 
@@ -231,28 +230,28 @@ class Round {
         let temp;
         //set up x0+x1*z
         linear.push(this.collection.length)
-        for (let x1 = 1; x1 <= 20; x1++ ) {
+        for (let x1 = 1; x1 <= 20; x1++) {
             for (let x0 = 0; x0 < x1; x0++) {
-                temp = buildConcept(x0,x1,0,0,0,0)
+                temp = buildConcept(x0, x1, 0, 0, 0, 0)
                 if (temp.length >= 5) {
                     this.collection.push(temp.slice());
-                    this.names.push(x0+"+"+x1+"z")
+                    this.names.push(x0 + "+" + x1 + "z")
                 }
             }
         }
-        linear.push(this.collection.length -1);
+        linear.push(this.collection.length - 1);
         this.styles.push(linear)
         //set up x0+x2*base**z
         
         exp.push(this.collection.length)
-        for (let x2 = 1; x2 < 50;x2++) {
+        for (let x2 = 1; x2 < 50; x2++) {
             for (let base = 2; base < 4; base++) {
-                for(let x0 = 0; x0 < 100;x0++) {
-                    temp = buildConcept(x0,0,x2,base,0,0)
-                if (temp.length >= 5) {
-                    this.collection.push(temp.slice());
-                    this.names.push(x0 + "+" + x2 + "*" + base + "**z")
-                }
+                for(let x0 = 0; x0 < 100; x0++) {
+                    temp = buildConcept(x0, 0, x2, base, 0, 0)
+                    if (temp.length >= 5) {
+                        this.collection.push(temp.slice());
+                        this.names.push(x0 + "+" + x2 + "*" + base + "**z")
+                    }
                 }
             }
         }
@@ -266,7 +265,7 @@ class Round {
         if (this.concept != null) {
             return this.concept;
         }
-        let temp = getRandomInt(0,this.styles.length-1);
+        let temp = getRandomInt(0, this.styles.length - 1);
         this.concept_index = getRandomInt(this.styles[temp][0], this.styles[temp][1]);
         this.concept = this.collection[this.concept_index];
         console.log("concept:", this.names[this.concept_index])
@@ -282,9 +281,9 @@ class Round {
             console.log("no further samples possible");
             return this.sample.slice()
         }
-        let i = getRandomInt(0,this.concept.length);
+        let i = getRandomInt(0, this.concept.length);
         while(this.sample.includes(this.concept[i])) {
-            i = getRandomInt(0,this.concept.length);
+            i = getRandomInt(0, this.concept.length);
         }
         this.sample.push(this.concept[i]);
         this.turn++;
@@ -326,13 +325,13 @@ class Round {
 function setup() {
     window.addEventListener('resize', function() {resize_handler()});
     ctx = setupCanvas(document.getElementsByClassName("canvas")[0]);
-    updateCanvas(ctx,Array.from({length:100},  (_,i) => i+1),[]);
+    updateCanvas(ctx,Array.from({length: 100},  (_, i) => i + 1), []);
 
     //turn on overlay
     turnOverlayOn();
     //adds functionality of "start/nextTurn" button
     const start_button = document.getElementsByClassName("start_button")[0];
-    start_button.addEventListener("click", function() {  if(game == null) {
+    start_button.addEventListener("click", function() { if(game == null) {
         game = new Game();
         game.startGame(10);
         } else {
@@ -348,7 +347,7 @@ function setup() {
 
    //functionality of "pass" button
    const pass_button = document.getElementsByClassName("pass_button")[0];
-   pass_button.addEventListener("click", function()  { if (round != null && round.started) {       
+   pass_button.addEventListener("click", function() { if (round != null && round.started) {       
        game.playersTurn = "pass";
    }
    })
@@ -361,7 +360,7 @@ function setup() {
     }})
 
     const input = document.getElementById("input");
-    input.addEventListener("input", function() {input_handler(ctx, game.current_round.sample)})
+    input.addEventListener("input", function() { input_handler(ctx, game.current_round.sample) })
 }
 
 function buttonsClickable(enableGameButtons, beforeGame) {
@@ -394,7 +393,7 @@ function resize_handler() {
     try{
         updateCanvas(ctx, current_guess, game.current_round.sample)
     } catch {
-        updateCanvas(ctx, current_guess,[])
+        updateCanvas(ctx, current_guess, [])
     }
 }
 
@@ -442,7 +441,7 @@ function input_handler(ctx, sample) {
             } 
             catch (e) {
                 
-                return [0,1];
+                return [0, 1];
             }
             x0 = x0 + arr[i];
         } else {
@@ -456,21 +455,21 @@ function input_handler(ctx, sample) {
             if (arr[i].includes("**")) {
                     if (arr[i].indexOf("**") > arr[i].indexOf("z")) { // x3*z**exponent
                         exponent = exponent + eval(arr[i].substring(arr[i].indexOf("**") + 2))
-                        if (arr[i].substring(0,arr[i].indexOf("z")).length != 0) {
-                            if (arr[i].substring(0,arr[i].indexOf("z")).slice(-1) == "*") { //x3*z**exponent
-                                x3 = x3 + eval(arr[i].substring(0,arr[i].indexOf("z")-1));
+                        if (arr[i].substring(0, arr[i].indexOf("z")).length != 0) {
+                            if (arr[i].substring(0, arr[i].indexOf("z")).slice(-1) == "*") { //x3*z**exponent
+                                x3 = x3 + eval(arr[i].substring(0, arr[i].indexOf("z") - 1));
                             }  else{ // x3z**exponent
-                                x3 = x3 + eval(arr[i].substring(0,arr[i].indexOf("z")));
+                                x3 = x3 + eval(arr[i].substring(0, arr[i].indexOf("z")));
                             }
                         } else {
                             x3 = 1;
                         }
                     } else { //x2*base**z
-                        if (arr[i].substring(0,arr[i].indexOf("**")).includes("*")) { //x2*base**z
-                            base = eval(arr[i].substring(0,arr[i].indexOf("**")).substring(arr[i].substring(arr[i].indexOf("**")).lastIndexOf("*") +1 ));
-                            x2 = eval(arr[i].substring(0,arr[i].indexOf("**")).substring(0,arr[i].substring(0,arr[i].indexOf("**")).lastIndexOf("*")));
+                        if (arr[i].substring(0, arr[i].indexOf("**")).includes("*")) { //x2*base**z
+                            base = eval(arr[i].substring(0, arr[i].indexOf("**")).substring(arr[i].substring(arr[i].indexOf("**")).lastIndexOf("*") + 1));
+                            x2 = eval(arr[i].substring(0, arr[i].indexOf("**")).substring(0, arr[i].substring(0, arr[i].indexOf("**")).lastIndexOf("*")));
                         } else { //base**z
-                            base = eval(arr[i].substring(0,arr[i].indexOf("**")));
+                            base = eval(arr[i].substring(0, arr[i].indexOf("**")));
                             x2 = 1
                         }
                     }
@@ -481,25 +480,25 @@ function input_handler(ctx, sample) {
                     console.log("trivial")
                     x1 = x1 + 1
                 } else {
-                    if (arr[i].slice(-2,-1) == "*") {
-                        x1 = x1+ eval(arr[i].substring(0,arr[i].length-2))
+                    if (arr[i].slice(-2, -1) == "*") {
+                        x1 = x1 + eval(arr[i].substring(0, arr[i].length - 2))
                     } else {
-                        x1 = x1 + eval(arr[i].substring(0,arr[i].length-1))
+                        x1 = x1 + eval(arr[i].substring(0, arr[i].length - 1))
                     }
                 }
             }
         }
     }
     current_guess = buildConcept(x0, x1, x2, base, x3, exponent);
-    updateCanvas(ctx,current_guess,sample)
+    updateCanvas(ctx, current_guess, sample)
 }
 
 //x0+x1*z+x2*base**z+x3*z**exponent
-function buildConcept(x0,x1,x2,base,x3,exponent) {
+function buildConcept(x0, x1, x2, base, x3, exponent) {
     let concept = [];
     let number;
     if (base != 0) {
-         number = x0 +x2;
+         number = x0 + x2;
     } else {
          number = x0 ;
     }
@@ -575,9 +574,9 @@ function updateCanvas(ctx, guess, sample) {
         let grid_size = width / 100; 
         //draw cooridinate system
         for (let i = 0; i <= 100; i = i + 10) {
-            ctx.font = 2*grid_size+"px arial";
+            ctx.font = 2 * grid_size+"px arial";
             ctx.fillStyle ="black"
-            ctx.fillText(i, grid_size +i*grid_size, 3 *height / 5 + 20 * grid_size / 4)   
+            ctx.fillText(i, grid_size + i * grid_size, 3 *height / 5 + 20 * grid_size / 4)   
         }
 
         // draw guess
@@ -588,7 +587,7 @@ function updateCanvas(ctx, guess, sample) {
                 } else {
                     ctx.fillStyle = "black";
                 }
-                ctx.fillRect(grid_size +i*grid_size, 3*height/5, 2*grid_size/4, 10*grid_size/4);
+                ctx.fillRect(grid_size + i * grid_size, 3 *  height / 5, 2 * grid_size / 4, 10 * grid_size / 4);
             }
         }
 
@@ -610,32 +609,29 @@ function updateCanvas(ctx, guess, sample) {
         let y_offset = rowsize /2.1
 
         for (let row = 0; row <= 4; row++) {
-            for (let col = 10; col <= 20; col = col+10){
+            for (let col = 10; col <= 20; col = col + 10){
                 ctx.font = "bold " + rowsize/4+"px arial";
                 ctx.fillStyle ="black"
-                if (row*20 + col == 100) {
-                    ctx.fillText(row*20 + col, col*grid_size - grid_size /4, y_offset+rowsize*row + rowsize/2.5);
+                if (row * 20 + col == 100) {
+                    ctx.fillText(row * 20 + col, col * grid_size - grid_size / 4, y_offset + rowsize * row + rowsize / 2.5);
                 } else {
-                    ctx.fillText(row*20 + col, col*grid_size - grid_size /8, y_offset+rowsize*row + rowsize/2.5);
+                    ctx.fillText(row * 20 + col, col * grid_size - grid_size / 8, y_offset + rowsize * row + rowsize / 2.5);
                 }
-                
             }
-            
         }
-        let radius =width/70
+        let radius = width / 70
         // draw guess
         for (let row = 0; row <= 4; row++) {
             for (let col = 1; col <= 20; col++){
-                if (guess.includes(row*20 + col)) {
-                    if (sample.includes(row*20 + col)) {
+                if (guess.includes(row * 20 + col)) {
+                    if (sample.includes(row * 20 + col)) {
                         ctx.fillStyle ="green";
                     } else {
                         ctx.fillStyle = "black";
                     }
                     //ctx.fillRect(col*grid_size, rowsize+rowsize*row, width/70, width/70);
                     ctx.beginPath()
-                    ctx.arc(col*grid_size + radius/2,  y_offset+rowsize*row + radius/2, radius/2, 0, 2 * Math.PI, false)
-                    
+                    ctx.arc(col * grid_size + radius / 2, y_offset + rowsize * row + radius / 2, radius / 2, 0, 2 * Math.PI, false)
                     ctx.fill();
                 }
             }
@@ -644,20 +640,19 @@ function updateCanvas(ctx, guess, sample) {
         //draw samples
         for (let row = 0; row <= 4; row++) {
             for (let col = 1; col <= 20; col++){
-                if (sample.includes(row*20 + col)) {
-                    console.log("row",row,"col",col)
-                    if (guess.includes(row*20 + col)) {
-                        ctx.fillStyle ="green";
+                if (sample.includes(row * 20 + col)) {
+                    console.log("row", row, "col", col)
+                    if (guess.includes(row * 20 + col)) {
+                        ctx.fillStyle = "green";
                     } else {
                         ctx.fillStyle = "red";
                     }
                     //ctx.fillRect(col*grid_size, rowsize+rowsize*row-grid_size/2, dpr*10, dpr*10);
                     ctx.beginPath()
-                    ctx.arc(col*grid_size + radius/2,  y_offset+rowsize*row -grid_size/2+ radius/2, radius/2, 0, 2 * Math.PI, false)
+                    ctx.arc(col * grid_size + radius / 2, y_offset + rowsize * row - grid_size / 2 + radius / 2, radius / 2, 0, 2 * Math.PI, false)
                     ctx.fill();
                 }
             }
-            
         }
     }
 }
