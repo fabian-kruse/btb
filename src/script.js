@@ -219,7 +219,7 @@ class Round {
         this.upper_bound = 100;
         this.names = [];
         this.collection = [];
-        this.styles = [];
+        this.classes = []; //represents the classes of the samples (linear, exponential, etc.) 
         this.setupConcepts();
         this.concept;
         this.sample = [];
@@ -248,23 +248,26 @@ class Round {
             }
         }
         linear.push(this.collection.length - 1);
-        this.styles.push(linear)
+        this.classes.push(linear)
+
         //set up x0+x2*base**z
-        
         exp.push(this.collection.length)
         for (let x2 = 1; x2 < 50; x2++) {
             for (let base = 2; base < 4; base++) {
                 for(let x0 = 0; x0 < 100; x0++) {
+                    //rule out redundant concepts
+                    if (x2**2 == base) continue;
+                    //TODO: filter out redundant concepts
                     temp = buildConcept(x0, 0, x2, base, 0, 0)
                     if (temp.length >= 5) {
                         this.collection.push(temp.slice());
                         this.names.push(x0 + "+" + x2 + "*" + base + "**z")
-                    }
+                    }    
                 }
             }
         }
         exp.push(this.collection.length)
-        this.styles.push(exp)
+        this.classes.push(exp)
     }
 
     //choose a hidden concpet for this round
@@ -272,8 +275,9 @@ class Round {
         if (this.concept != null) {
             return this.concept;
         }
-        let temp = getRandomInt(0, this.styles.length - 1);
-        this.concept_index = getRandomInt(this.styles[temp][0], this.styles[temp][1]);
+        let temp = getRandomInt(0, this.classes.length);
+        console.log("current range: "+this.classes[temp][0], this.classes[temp][1])
+        this.concept_index = getRandomInt(this.classes[temp][0], this.classes[temp][1]);
         this.concept = this.collection[this.concept_index];
         console.log("concept:", this.names[this.concept_index])
     }
@@ -701,7 +705,6 @@ function updateCanvas(ctx, guess, sample) {
         for (let row = 0; row <= 4; row++) {
             for (let col = 1; col <= 20; col++){
                 if (sample.includes(row * 20 + col)) {
-                    console.log("row", row, "col", col)
                     if (guess.includes(row * 20 + col)) {
                         ctx.fillStyle = "green";
                     } else {
