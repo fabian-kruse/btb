@@ -15,7 +15,6 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
 const guessReaction = ["I think it is ", "my guess: ", "It should be ", "I got ", "My answer is ", "It must be "]
 
 //TODO: guess of computer should be a concept not a list
-//TODO: include round counter
 //TODO: add more complicated concepts
 
 //this class represents the current game
@@ -29,13 +28,12 @@ class Game {
         this.model;
         this.playersTurn = "";
     }
-
+    //main class of Game, handles all the game logic
     async startGame(pointLimit) {
         let cTurn;
         let pTurn;
         
         //enable game buttons
-        
         document.getElementsByClassName("start_button")[0].textContent = "Skip"
         
         while (!this.game_over) {
@@ -70,9 +68,7 @@ class Game {
                         break;
                     }
                 }
-
                 showSample(this.current_round.getNextSample());
-
                 //last round
                 if (this.current_round.sample.length > 4) {
                     if (this.player_is_major ) {
@@ -98,10 +94,7 @@ class Game {
                     }
                     this.current_round.isOver = true;
                 } 
-                console.log("wait")
                 await timeout(1500)
-                console.log("wait done")
-                
             }
             updateScores(this.score[0], this.score[1]);
             //if any player reached the point limit, end the game
@@ -125,10 +118,11 @@ class Game {
             buttonsClickable(false, true)
             await this.waitForNextRound();
         }
-        turnAfterRoundOverlayOn();
         //declare winner
+        turnAfterGameOverlayOn();
     }
 
+    //starts a new round in a game and updates all information
     startRound() {
         //logical start of round
         current_guess = Array.from(Array(100).keys());
@@ -148,9 +142,11 @@ class Game {
         //set round number
         document.getElementById("round_number").textContent = (this.score[0] + this.score[1] + 1).toString();
 
+        //draw sample
         showSample(this.current_round.getNextSample());
     }
 
+    //function that waits for player action to start next turn
     async waitForNextRound() {
         while(!nextTurn) {
             await timeout(300)
@@ -158,6 +154,7 @@ class Game {
         nextTurn = false;
     }
 
+    //handles the turn of the player
     async playersTurnHandler() {
         this.playersTurn = "";
         // make buttons clickable
@@ -172,6 +169,7 @@ class Game {
         return this.playersTurn;
     }
 
+    //plays a the turn given what the player or computer likes to do
     playTurn(player, turn) {
         console.log("player", player, turn)
         //player takes a guess
@@ -214,7 +212,6 @@ class Game {
     }
 }
 
-
 //class that represents a single instance of a round
 class Round {
     constructor() {
@@ -233,6 +230,7 @@ class Round {
         this.turn = 0;
     }
 
+    //sets up the concepts for the round
     //x0+x1*z+x2*base**z+x3*z**exponent
     setupConcepts() {
         let linear = [];
@@ -269,8 +267,7 @@ class Round {
         this.styles.push(exp)
     }
 
-
-    //set a concept from the collection
+    //choose a hidden concpet for this round
     setConcept() {
         if (this.concept != null) {
             return this.concept;
@@ -281,7 +278,7 @@ class Round {
         console.log("concept:", this.names[this.concept_index])
     }
 
-    //gets a sample from the current concept
+    //gets a sample from the hidden concept
     getNextSample() {
         if (this.concept == null) {
             console.log("no concept defined")
@@ -314,6 +311,7 @@ class Round {
         return false
     }
 
+    //returns the name of the guess
     getNameOfGuess(guess) {
         loop1:
         for (let i = 0; i < this.collection.length; i++) {
@@ -331,19 +329,7 @@ class Round {
     }
 }
 
-function setupNextGame() {
-    updateCanvas(ctx,Array.from({length: 100},  (_, i) => i + 1), []);
-    game = null;
-    document.getElementsByClassName("start_button")[0].textContent = "Start";
-    buttonsClickable(false, true);
-    updateScores(0, 0);
-    document.getElementById("bayes_img").src = "/img/bayes.jpeg";
-    showSample("");
-    document.getElementById("result").innerHTML = '';
-    document.getElementsByClassName("c_text")[0].textContent = "Better than Bayes?"
-}
-
-//handles setup of website
+//handles initial setup of website
 function setup() {
     window.addEventListener('resize', function() {resize_handler()});
     ctx = setupCanvas(document.getElementsByClassName("canvas")[0]);
@@ -385,6 +371,21 @@ function setup() {
     input.addEventListener("input", function() { input_handler(ctx, game.current_round.sample) })
 }
 
+//sets up the webseite for next game
+function setupNextGame() {
+    updateCanvas(ctx,Array.from({length: 100},  (_, i) => i + 1), []);
+    game = null;
+    document.getElementsByClassName("start_button")[0].textContent = "Start";
+    buttonsClickable(false, true);
+    updateScores(0, 0);
+    document.getElementById("bayes_img").src = "/img/bayes.jpeg";
+    showSample("");
+    document.getElementById("result").innerHTML = '';
+    document.getElementsByClassName("c_text")[0].textContent = "Better than Bayes?"
+}
+
+//disables/enables the player buttons
+//if before game, only start button is clickable
 function buttonsClickable(enableGameButtons, beforeGame) {
     const start_button = document.getElementsByClassName("start_button")[0];
     const pass_button = document.getElementsByClassName("pass_button")[0];
@@ -404,13 +405,16 @@ function next_turn_handler() {
     nextTurn = true;
 }
 
+//helper timeout function return a promise
 const timeout = async ms => new Promise(res => setTimeout(res, ms));
 
+//function that updates score of players
 function updateScores(p_score, c_score) {
     document.getElementById("player_score").textContent = p_score
     document.getElementById("computer_score").textContent = c_score
 }
 
+//function that redraws the canvas
 function resize_handler() {
     try{
         updateCanvas(ctx, current_guess, game.current_round.sample)
@@ -419,15 +423,18 @@ function resize_handler() {
     }
 }
 
+//fucntion that turns of help overlay
 function turnOverlayOff() {
     document.getElementsByClassName("overlay")[0].style.display = "none";
-  }
+}
 
+//function that turns on the help overlay
 function turnOverlayOn() {
     updateTableValues();
     document.getElementsByClassName("overlay")[0].style.display = "block";
-  }
+}
 
+//function that retrieves curretn game score for score table
 function updateTableValues() {
     if (game == null) {
         document.getElementsByClassName("player_score")[0].textContent = 0;
@@ -444,18 +451,19 @@ function updateTableValues() {
     document.getElementsByClassName("computer_score")[3].textContent = totalScore.slice()[1];
 }
 
-function turnAfterRoundOverlayOff() {
+//function that turns off the after-game overlay
+function turnAfterGameOverlayOff() {
     document.getElementsByClassName("afterGame")[0].style.visibility = "hidden";
     setupNextGame();
 }
 
-function turnAfterRoundOverlayOn() {
+//function that turns on the after-game overlay
+function turnAfterGameOverlayOn() {
     updateTableValues();
-    document.getElementsByClassName("afterGame")[0].style.visibility='visible';
+    document.getElementsByClassName("afterGame")[0].style.visibility = 'visible';
 }
   
-
-
+//function that handles all concept inputs of player
 //input of form: 2 + 3z
 // 7+12*z
 function input_handler(ctx, sample) {
@@ -544,6 +552,7 @@ function input_handler(ctx, sample) {
     updateCanvas(ctx, current_guess, sample)
 }
 
+//helper function, that builds the set of numbers according to concept
 //x0+x1*z+x2*base**z+x3*z**exponent
 function buildConcept(x0, x1, x2, base, x3, exponent) {
     let concept = [];
@@ -713,7 +722,6 @@ function clearCanvas(ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-
 // checks if a guess is the hidden concept of that round
 function animateResult(guessedCorrectly) {
     if (guessedCorrectly) {
@@ -732,7 +740,6 @@ function showSample(sample) {
     current_sample.innerHTML = sample;
     updateCanvas(ctx,current_guess,sample)
 }
-
 
 // returns random Int n , where min <= n < max
 function getRandomInt(min, max) {
