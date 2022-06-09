@@ -12,7 +12,7 @@ const passReaction = ["I pass", "Mhmm...", "This is a hard one", "I can't tell y
  "Give me some time","Time will tell", "Can you give me a hint?", "I have no idea", "Not sure yet...", "I almost have it", "What is the posterior?",
 "Almost...", "I will win...Soon!", "I have to pass here", "I pass...for now"]
 //guess reactions of computer
-const guessReaction =["I think it is ", "my guess:", "It should be ", "I got ", "My answer is ", "It must be "]
+const guessReaction = ["I think it is ", "my guess: ", "It should be ", "I got ", "My answer is ", "It must be "]
 
 //TODO: guess of computer should be a concept not a list
 //TODO: include round counter
@@ -135,7 +135,7 @@ class Game {
         this.current_round = new Round();
         this.model = new Bayes(this.current_round.collection);
         this.current_round.started = true;
-
+        
         //TODO: static because of exit
         round = this.current_round;
         model = this.model;
@@ -144,6 +144,9 @@ class Game {
         //visual start of round
         document.getElementById("result").innerHTML = ""
         document.getElementsByClassName("c_text")[0].textContent = "We'll see!"
+
+        //set round number
+        document.getElementById("round_number").textContent = (this.score[0] + this.score[1] + 1).toString();
 
         showSample(this.current_round.getNextSample());
     }
