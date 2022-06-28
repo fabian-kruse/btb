@@ -492,18 +492,19 @@ function turnAfterGameOverlayOn() {
 // 7+12*z
 function input_handler(ctx, sample) {
     let concept = document.getElementById("input").value.replace(/[^-()\d/*+.z^]/g,"");
+    console.log("preprocessed: "+ concept)
     //let concept = input.slice();
     if (concept.length == 0) {
         console.log("length of 0")
-        return [0, 1]
+        return
     }
     let arr;
     if (concept.includes("+")) {
-         arr = concept.split("+");
+        arr = concept.split("+");
     } else if (concept.includes("-")) {
-         arr = concept.split("-");
+        arr = concept.split("-");
     } else {
-         arr = [concept];
+        arr = [concept];
     }
     
     arr = arr.filter(Boolean);
@@ -514,7 +515,7 @@ function input_handler(ctx, sample) {
     let base = 0;
     let x3 = 0;
     let exponent = 0;
-    for (let i = 0; i < arr.length;i++) {
+    for (let i = 0; i < arr.length; i++) {
         if (arr[i].includes("^")) {
             arr[i] = arr[i].replace("^", "**");
         }
@@ -523,14 +524,13 @@ function input_handler(ctx, sample) {
                 arr[i] = eval(arr[i]);
             } 
             catch (e) {
-                
-                return [0, 1];
+                return
             }
             x0 = x0 + arr[i];
-        } else {
+        } else { //arr[i] includes "z"
             if (arr[i].includes("/")) {
                 console.log("contains /");
-                return [0, 1]
+                return
             }
             //2z
             //2*z
@@ -556,7 +556,6 @@ function input_handler(ctx, sample) {
                             x2 = 1
                         }
                     }
-                
             
             } else { //x1*z or x1z  or z
                 if (arr[i].length == 1) { // z
@@ -572,7 +571,9 @@ function input_handler(ctx, sample) {
             }
         }
     }
+    console.log("parsed as: "+ x0 + " + " + x1 + "*z + " + x2 + "*" + base + "**z + " + x3 + "*z**"+exponent)
     current_guess = buildConcept(x0, x1, x2, base, x3, exponent);
+    console.log("set: "+current_guess)
     updateCanvas(ctx, current_guess, sample)
 }
 
