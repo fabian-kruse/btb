@@ -235,6 +235,7 @@ class Round {
     setupConcepts() {
         let linear = [];
         let exp = [];
+        let poly = [];
         let temp;
         //set up x0+x1*z
         linear.push(this.collection.length)
@@ -255,7 +256,10 @@ class Round {
         for (let x2 = 1; x2 < 50; x2++) {
             for (let base = 2; base < 4; base++) {
                 for(let x0 = 0; x0 < 100; x0++) {
+
+                    //filter redundaten concepts
                     //rule out redundant concepts
+                    //concept redudant of x2 = base
                     if (x2**2 == base) continue;
                     //TODO: filter out redundant concepts
                     temp = buildConcept(x0, 0, x2, base, 0, 0)
@@ -268,6 +272,22 @@ class Round {
         }
         exp.push(this.collection.length)
         this.classes.push(exp)
+    //x0+x1*z+x2*base**z+x3*z**exponent
+        poly.push(this.collection.length)
+        for (let x3 = 1; x3 < 2; x3++) {
+            for (let exponent = 2; exponent < 5; exponent++) {
+                for(let x0 = 0; x0 < 100; x0++) {
+                    temp = buildConcept(x0, 0, 0, 0, x3, exponent)
+                    if (temp.length >= 5) {
+                        this.collection.push(temp.slice());
+                        this.names.push(x0 + "+" + x3 + "*z**" + exponent)
+                    }    
+                }
+            }
+        }
+        poly.push(this.collection.length)
+        this.classes.push(poly)
+        console.log(poly)
     }
 
     //choose a hidden concpet for this round
@@ -275,7 +295,7 @@ class Round {
         if (this.concept != null) {
             return this.concept;
         }
-        let temp = getRandomInt(0, this.classes.length);
+        let temp = getRandomInt(2, this.classes.length);
         console.log("current range: "+this.classes[temp][0], this.classes[temp][1])
         this.concept_index = getRandomInt(this.classes[temp][0], this.classes[temp][1]);
         this.concept = this.collection[this.concept_index];
