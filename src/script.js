@@ -138,7 +138,7 @@ class Game {
 					totalScore[1] = totalScore[1] + 1;
 					document.getElementsByClassName('c_text')[0].textContent =
 						'You are not better than Bayes!';
-					document.getElementById('bayes_img').src = '/img/bayesWin.jpeg';
+					document.getElementById('bayes_img').src = 'bayesWin.jpeg';
 					document.getElementById('winning_text').textContent = 'You lose!';
 				} else {
 					totalScore[0] = totalScore[0] + 1;
@@ -492,7 +492,7 @@ function setupNextGame() {
 	document.getElementsByClassName('start_button')[0].textContent = 'Start';
 	buttonsClickable(false, true);
 	updateScores(0, 0);
-	document.getElementById('bayes_img').src = '/img/bayes.jpeg';
+	document.getElementById('bayes_img').src = 'bayes.jpeg';
 	showSample('');
 	document.getElementById('result').innerHTML = '';
 	document.getElementsByClassName('c_text')[0].textContent =
