@@ -200,7 +200,6 @@ class Game {
 		this.playersTurn = '';
 		// make buttons clickable
 		buttonsClickable(true, false);
-		console.log('it is your turn');
 		//wait until player takes action
 		while (this.playersTurn == '') {
 			await new Promise((res) => setTimeout(() => res('p2'), 1000));
@@ -212,7 +211,6 @@ class Game {
 
 	//plays a the turn given what the player or computer likes to do
 	playTurn(player, turn) {
-		console.log('player', player, turn);
 		//player takes a guess
 		if (turn.toString().includes('guess:')) {
 			if (player == 'C') {
@@ -225,7 +223,6 @@ class Game {
 			if (this.current_round.isCorrectConcept(arr)) {
 				animateResult(true);
 				if (player == 'P') {
-					console.log('player guessed correctly');
 					this.current_round.isOver = true;
 					this.score[0] = this.score[0] + 1;
 				} else if (player == 'C') {
@@ -237,7 +234,6 @@ class Game {
 							})
 						) +
 						'.';
-					console.log('computer guessed correctly');
 					this.current_round.isOver = true;
 					this.score[1] = this.score[1] + 1;
 				}
@@ -252,7 +248,6 @@ class Game {
 				document.getElementsByClassName('c_text')[0].textContent =
 					passReaction[getRandomInt(0, passReaction.length)];
 			}
-			console.log(player + ' passed');
 		}
 		//only used for debugging
 		if (player == 'C')
@@ -273,6 +268,7 @@ class Round {
 		this.names = [];
 		this.collection = [];
 		this.classes = []; //represents the classes of the samples (linear, exponential, etc.)
+		this.weights = [];
 		this.setupConcepts();
 		this.concept;
 		this.sample = [];
@@ -281,7 +277,6 @@ class Round {
 		this.setConcept();
 		this.isOver = false;
 		this.turn = 0;
-		this.weights = [];
 	}
 
 	//sets up the concepts for the round
@@ -367,10 +362,6 @@ class Round {
 			return this.concept;
 		}
 		let temp = getRandomInt(2, this.classes.length);
-		console.log(
-			'current range: ' + this.classes[temp][0],
-			this.classes[temp][1]
-		);
 		this.concept_index = getRandomInt(
 			this.classes[temp][0],
 			this.classes[temp][1]
@@ -447,7 +438,7 @@ function setup() {
 	start_button.addEventListener('click', function () {
 		if (game == null) {
 			game = new Game();
-			game.startGame(2);
+			game.startGame(11);
 		} else {
 			next_turn_handler();
 		}
@@ -593,7 +584,6 @@ function input_handler(ctx, sample) {
 	let concept = document
 		.getElementById('input')
 		.value.replace(/[^-()\d/*+.z^]/g, '');
-	console.log('preprocessed: ' + concept);
 	//let concept = input.slice();
 	if (concept.length == 0) {
 		console.log('length of 0');
@@ -696,22 +686,7 @@ function input_handler(ctx, sample) {
 			}
 		}
 	}
-	console.log(
-		'parsed as: ' +
-			x0 +
-			' + ' +
-			x1 +
-			'*z + ' +
-			x2 +
-			'*' +
-			base +
-			'**z + ' +
-			x3 +
-			'*z**' +
-			exponent
-	);
 	current_guess = buildConcept(x0, x1, x2, base, x3, exponent);
-	console.log('set: ' + current_guess);
 	updateCanvas(ctx, current_guess, sample);
 }
 
